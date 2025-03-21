@@ -3,7 +3,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "data": "cd src/data && g++ main.cpp && ./a.out && rm ./a.out"
+        "data": "cd src/data && g++ main.cpp -O3 && ./a.out && rm ./a.out"
     },
     "dependencies": {
         "next": "15.2.3",
