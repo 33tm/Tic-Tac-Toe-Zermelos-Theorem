@@ -9,8 +9,8 @@ using namespace std;
 ofstream out("boards.json");
 unordered_set<uint32_t> boards;
 
-std::string binary(uint32_t n) {
-    std::string binary = "";
+string binary(uint32_t n) {
+    string binary = "";
     for (int i = 0; i < 32; i++) {
         binary += (n & 1) + '0';
         n >>= 1;
@@ -18,8 +18,8 @@ std::string binary(uint32_t n) {
     return binary;
 }
 
-std::string format(uint32_t board) {
-    std::string output = "";
+string format(uint32_t board) {
+    string output = "";
     for (int i = 0; i < 9; i++) {
         uint8_t player = (board >> i * 2) & 0b11;
         output += player == X ? "X" : player == O ? "O" : "·";
