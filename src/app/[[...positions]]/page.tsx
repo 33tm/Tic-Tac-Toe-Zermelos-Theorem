@@ -3,6 +3,10 @@ import { redirect } from "next/navigation"
 
 const boards: Tree = require("@/data/boards.json")
 
+// Okay maybe not a good idea generating 250,000+ pages
+// export const generateStaticParams = () => traverse(boards)
+//     .map(path => ({ params: { positions: path } }))
+
 export default async ({ params }: { params: Promise<{ positions: string[] }> }) => {
     const { positions } = await params
     if (!positions) return redirect("/0")
@@ -88,6 +92,21 @@ function Node({ current, turn }: { current: Tree, turn: "X" | "O" }) {
             ))}
         </div>
     )
+}
+
+function traverse(tree: Tree, path: string[] = []) {
+    let paths: string[][] = []
+
+    for (const node in tree) {
+        const p = [...path, node]
+
+        if (isTree(tree[node]))
+            paths = [...paths, ...traverse(tree[node], p)]
+        else
+            paths.push(p)
+    }
+
+    return paths
 }
 
 function evaluate(tree: Tree, target: "X" | "O" | null): boolean {
