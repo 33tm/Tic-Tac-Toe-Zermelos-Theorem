@@ -1,4 +1,4 @@
-A (hopefully adequate) application of Zermelo's theorem for a math project, check it out at [z.tttm.us](https://z.tttm.us) :DD
+A (hopefully adequate) application of Zermelo's theorem for a math project :DD
 
 Zermelo's theorem is able to work on tic-tac-toe since it:
 - Involves two players
@@ -43,4 +43,4 @@ O··
 ··X
 ```
 
-The "meat" of everything is in `/src/app/[[...positions]]/page.tsx`; board positions are slugs in the order of moves made, statically generated. Enjoy!!
+The "meat" of everything is in `/src/app/[[...positions]]/page.tsx`; board positions are slugs in the order of moves made. Enjoy!!
