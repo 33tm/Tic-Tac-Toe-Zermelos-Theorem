@@ -50,19 +50,26 @@ export default async ({ params }: { params: Promise<{ positions: string[] }> }) 
                             href={(value || status) ? "" : `/${[...positions, reference].join("/")}`}
                         >
                             <div className={`flex w-full h-full m-auto rounded-xl ${best.includes(reference.toString()) ? "bg-tertiary" : "bg-primary"} ${optimal.includes(reference) && "outline-4 outline-tertiary"}`}>
-                                <p className="m-auto text-[50px] font-mono font-bold text-tertiary">
-                                    {value}
-                                </p>
+                                <div className="m-auto text-[50px] font-mono font-bold text-tertiary">
+                                    {value
+                                        ? value
+                                        : (
+                                            <p className="m-auto text-sm text-secondary">
+                                                {reference}
+                                            </p>
+                                        )
+                                    }
+                                </div>
                             </div>
                         </Link>
                     )
                 })}
             </div>
-            <div className="h-96 w-96 m-auto rounded-2xl grid grid-cols-3 grid-rows-3 gap-4 p-4 bg-secondary outline-4 outline-tertiary">
+            {/* <div className="h-96 w-96 m-auto rounded-2xl grid grid-cols-3 grid-rows-3 gap-4 p-4 bg-secondary outline-4 outline-tertiary">
                 {positions.length > 3 && (
                     <Node current={current} turn={turn} />
                 )}
-            </div>
+            </div> */}
         </div>
     )
 }
