@@ -1,9 +1,10 @@
 import Link from "next/link"
+import Image from "next/image"
 import { redirect } from "next/navigation"
 
 const boards: Tree = require("@/data/boards.json")
 
-// Okay maybe not a good idea generating 250,000+ pages
+// Okay maybe it's not a good idea generating 250,000+ pages
 // export const generateStaticParams = () => traverse(boards)
 //     .map(path => ({ params: { positions: path } }))
 
@@ -43,9 +44,20 @@ export default async ({ params }: { params: Promise<{ positions: string[] }> }) 
         })
         .map(([key]) => parseInt(key))
 
+    const probabilities = cells.map((value, i) => {
+        if (value) return 0
+        count
+        // const reference = position | (player << i * 2)
+        // const next = current[reference]
+        // if (!isTree(next)) return 0
+        // return traverse(next).length
+    })
+
+    console.log(probabilities)
+
     return (
-        <div className="flex w-screen h-screen">
-            <div className="h-96 w-96 m-auto rounded-2xl grid grid-cols-3 grid-rows-3 gap-4 p-4 bg-secondary outline-4 outline-tertiary">
+        <div className="flex w-screen h-screen justify-evenly">
+            <div className="h-96 w-96 my-auto rounded-2xl grid grid-cols-3 grid-rows-3 gap-4 p-4 bg-secondary outline-4 outline-tertiary">
                 {cells.map((value, i) => {
                     const reference = position | (player << i * 2)
                     return (
@@ -69,11 +81,14 @@ export default async ({ params }: { params: Promise<{ positions: string[] }> }) 
                     )
                 })}
             </div>
-            {/* <div className="h-96 w-96 m-auto rounded-2xl grid grid-cols-3 grid-rows-3 gap-4 p-4 bg-secondary outline-4 outline-tertiary">
-                {positions.length > 3 && (
-                    <Node current={current} turn={turn} />
-                )}
-            </div> */}
+            <div className="relative h-96 w-[1000px] my-auto rounded-2xl grid grid-cols-3 grid-rows-3 gap-4 p-4 bg-secondary outline-4 outline-tertiary">
+                <Image
+                    src={`http://localhost:5000/${positions.join("/")}`}
+                    alt="Board"
+                    className="p-2 rounded-2xl"
+                    fill
+                />
+            </div>
         </div>
     )
 }
@@ -107,6 +122,10 @@ function traverse(tree: Tree, path: string[] = []) {
     }
 
     return paths
+}
+
+function count(tree: Tree, target: "X" | "O" | null, current: [number, number]) {
+
 }
 
 function evaluate(tree: Tree, target: "X" | "O" | null): boolean {
