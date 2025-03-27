@@ -3,7 +3,8 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "data": "cd src/data && g++ main.cpp -O3 && ./a.out && rm ./a.out"
+        "data": "cd src/data && g++ main.cpp -O3 && ./a.out && rm ./a.out",
+        "tree": "if ! [ -d .venv ]; then python3 -m venv .venv; fi && source .venv/bin/activate && cd src/tree && pip install -r requirements.txt && python3 -m flask --app main run"
     },
     "dependencies": {
         "next": "15.2.3",
