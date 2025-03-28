@@ -32,47 +32,79 @@ export default async ({ params }: { params: Promise<{ positions: string[] }> }) 
     for (let i = 0; i < 9; i++)
         cells.push(["", "X", "O"][(position >> (i * 2)) & 0b11])
 
-    const best: string[] = []
-    const optimal = Object
-        .entries(current)
-        .filter(([key, value]) => {
-            if (!isTree(value)) {
-                if (value === turn) best.push(key)
-                return value === turn
-            }
-            return evaluate(value, turn)
-        })
-        .map(([key]) => parseInt(key))
+    const probabilities = cells.map((_, i) => {
+        if ((position & (0b11 << i * 2)) >> i * 2) return
 
-    const probabilities = cells.map((value, i) => {
-        if (value) return 0
-        count
-        // const reference = position | (player << i * 2)
-        // const next = current[reference]
-        // if (!isTree(next)) return 0
-        // return traverse(next).length
+        const reference = (position | (player << i * 2)).toString()
+
+        let current = boards
+        for (const position of [...positions, reference]) {
+            const next = current[parseInt(position)]
+            if (!isTree(next)) break
+            current = next
+        }
+
+        let wins = 0
+        const paths = traverse(current)
+
+        for (const path of paths) {
+            let edge: any = current
+            for (const position of path)
+                edge = edge[parseInt(position)]
+            if (edge === turn) wins++
+        }
+
+        return wins / paths.length
     })
 
-    console.log(probabilities)
+    const optimal = probabilities
+        .filter(Boolean)
+        .sort((a, b) => a! - b!)
+        .reverse()[0]
+
+    const best: number[] = []
+    for (const n1 in current) {
+        const next = current[n1] as Tree
+        if (!isTree(next)) break
+        for (const n2 in next) {
+            const next = current[n1]![n2]
+            if ((next === "X" || next === "O") && turn !== next)
+                best.push(+n1)
+        }
+    }
 
     return (
         <div className="flex w-screen h-screen justify-evenly">
             <div className="h-96 w-96 my-auto rounded-2xl grid grid-cols-3 grid-rows-3 gap-4 p-4 bg-secondary outline-4 outline-tertiary">
                 {cells.map((value, i) => {
                     const reference = position | (player << i * 2)
+                    const probability = probabilities[i]!
+                    const isBest = best.length && !best.includes(reference) && !value
+
                     return (
                         <Link
                             key={i}
                             href={(value || status) ? "" : `/${[...positions, reference].join("/")}`}
                         >
-                            <div className={`flex w-full h-full m-auto rounded-xl ${best.includes(reference.toString()) ? "bg-tertiary" : "bg-primary"} ${optimal.includes(reference) && "outline-4 outline-tertiary"}`}>
+                            <div className={`flex w-full h-full m-auto rounded-xl bg-primary ${isBest && "bg-tertiary"} ${probability === optimal && optimal > 0 && "outline-4 outline-tertiary"}`}>
                                 <div className="m-auto text-[50px] font-mono font-bold text-tertiary">
                                     {value
                                         ? value
                                         : (
-                                            <p className="m-auto text-sm text-secondary">
-                                                {reference}
-                                            </p>
+                                            <div className="flex flex-col">
+                                                <p className={`m-auto text-sm text-secondary ${isBest && "text-white"}`}>
+                                                    {reference}
+                                                </p>
+                                                {probability ? (
+                                                    <p className={`m-auto text-xs opacity-80 ${isBest && "text-secondary"}`}>
+                                                        {probability.toFixed(3)}
+                                                    </p>
+                                                ) : (
+                                                    <p className={`m-auto text-xs opacity-80 ${isBest && "text-secondary"}`}>
+                                                        0
+                                                    </p>
+                                                )}
+                                            </div>
                                         )
                                     }
                                 </div>
@@ -122,17 +154,6 @@ function traverse(tree: Tree, path: string[] = []) {
     }
 
     return paths
-}
-
-function count(tree: Tree, target: "X" | "O" | null, current: [number, number]) {
-
-}
-
-function evaluate(tree: Tree, target: "X" | "O" | null): boolean {
-    return Object.values(tree).some(node => {
-        if (!isTree(node)) return node === target
-        return evaluate(node, target)
-    })
 }
 
 function isTree(tree: unknown): tree is Tree {
