@@ -1,6 +1,6 @@
 A (hopefully adequate) application of Zermelo's theorem for a math project :DD
 
-<img width="800" alt="Screenshot 2025-03-27 at 9 56 25 AM" src="https://github.com/user-attachments/assets/adc8a7cf-42f0-4ace-bc9a-5ea3599b227a" />
+<img width="800" alt="Screenshot 2025-03-27 at 8 45 37 PM" src="https://github.com/user-attachments/assets/1d60b3ac-9b10-4615-9a42-565f19e9523c" />
 
 Zermelo's theorem can be applied to tic-tac-toe since it:
 - Involves two players
